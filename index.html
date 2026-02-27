@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tạo mã QR - Tiến Thương</title>
+
+    <link rel="stylesheet" href="CSS/style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+  </head>
+  <body>
+    <div class="layout-container">
+      <div class="header-section">
+        <h1>Tạo mã <span>QR Nghệ Thuật</span></h1>
+        <div class="credit-badge">Được thiết kế bởi <b>Tiến Thương</b></div>
+        <br />
+        <br />
+        <p style="font-size: 13px; color: var(--text-gray)">
+          "Tài năng có thể do bẩm sinh, nhưng tri thức do học hành mà có."
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="controls-col">
+          <div class="card">
+            <div class="card-title">Thông tin mã QR</div>
+            <div class="input-group">
+              <input
+                type="text"
+                id="urlInput"
+                value=""
+                placeholder="Nhập link sản phẩm hoặc trang web"
+              />
+            </div>
+            <div class="input-group">
+              <input
+                type="text"
+                id="textInput"
+                placeholder="Nhập lời chúc (Chủ web vẫn FA)"
+              />
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Hình dáng khung</div>
+            <div class="btn-group shape-options">
+              <button
+                class="btn-option active"
+                onclick="changeShape('heart', this)"
+              >
+                Trái tim
+              </button>
+              <button class="btn-option" onclick="changeShape('square', this)">
+                Hình vuông
+              </button>
+              <button class="btn-option" onclick="changeShape('star', this)">
+                Ngôi sao
+              </button>
+              <button
+                class="btn-option"
+                onclick="changeShape('default', this)"
+                style="border-style: dashed"
+              >
+                Cơ bản (Mặc định)
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Chủ đề Background</div>
+            <div class="btn-group template-options">
+              <button class="btn-option active" data-theme="valentine">
+                Valentine
+              </button>
+              <button class="btn-option" data-theme="gift">Hộp Quà</button>
+              <button class="btn-option" data-theme="noel">Giáng Sinh</button>
+              <button class="btn-option" data-theme="aesthetic">
+                Bầu Trời
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Màu sắc mã QR</div>
+            <div class="color-palette">
+              <button
+                class="color-swatch"
+                style="background: #ffffff"
+                onclick="changeColor('#ffffff', this)"
+              ></button>
+              <button
+                class="color-swatch"
+                style="background: #000000"
+                onclick="changeColor('#000000', this)"
+              ></button>
+              <button
+                class="color-swatch active"
+                style="background: #ff4d6d"
+                onclick="changeColor('#ff4d6d', this)"
+              ></button>
+              <button
+                class="color-swatch"
+                style="background: #ef4444"
+                onclick="changeColor('#ef4444', this)"
+              ></button>
+              <button
+                class="color-swatch"
+                style="background: #f97316"
+                onclick="changeColor('#f97316', this)"
+              ></button>
+              <button
+                class="color-swatch"
+                style="background: #a855f7"
+                onclick="changeColor('#a855f7', this)"
+              ></button>
+              <button
+                class="color-swatch swatch-rainbow"
+                onclick="changeColor('rainbow', this)"
+              ></button>
+            </div>
+          </div>
+
+          <label
+            class="toggle-box"
+            onclick="document.getElementById('shieldToggle').click()"
+          >
+            <div style="font-size: 14px; font-weight: 500; color: #e4e4e7">
+              Bật khung kính nền (Giúp dễ quét hơn)
+            </div>
+            <input
+              type="checkbox"
+              id="shieldToggle"
+              checked
+              onclick="event.stopPropagation()"
+            />
+          </label>
+        </div>
+
+        <div class="preview-col">
+          <div class="card preview-card">
+            <div id="export-container">
+              <div class="overlay"></div>
+              <div class="shape-wrapper" id="shapeWrapper">
+                <div class="mask-common shield-layer" id="shieldLayer"></div>
+                <div class="mask-common dots-layer" id="dotsLayer"></div>
+                <div id="real-qrcode"></div>
+              </div>
+              <div id="text-display"></div>
+            </div>
+
+            <div class="warning-note">
+              <b>Lưu ý:</b> Hãy lấy một điện thoại khác quét thử mã QR ngay trên
+              mân hình để kiểm tra độ nhạy trước khi tải về nha!
+            </div>
+
+            <div class="actions">
+              <button
+                class="btn-action btn-upload"
+                onclick="document.getElementById('fileInput').click()"
+              >
+                Tải nền của bạn
+              </button>
+              <button class="btn-action btn-download" onclick="downloadQR()">
+                Tải QR về máy
+              </button>
+              <input type="file" id="fileInput" accept="image/*" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="JS/script.js"></script>
+    <script>
+      document.addEventListener("contextmenu", (event) =>
+        event.preventDefault(),
+      );
+      document.onkeydown = function (e) {
+        if (
+          e.keyCode == 123 ||
+          (e.ctrlKey &&
+            e.shiftKey &&
+            (e.keyCode == "I".charCodeAt(0) ||
+              e.keyCode == "J".charCodeAt(0) ||
+              e.keyCode == "C".charCodeAt(0))) ||
+          (e.ctrlKey && e.keyCode == "U".charCodeAt(0))
+        ) {
+          return false;
+        }
+      };
+    </script>
+  </body>
+</html>
